@@ -6,20 +6,20 @@ import java.io.Serializable;
  * Created by N3 on 27/09/2017.
  */
 
-public class Flmes_Activity implements Serializable {
+public class Filmes_Activity implements Serializable {
 
     private long id;
     private String titulo;
-    private Boolean disponibilidade;
+    private Integer disponibilidade;
     private String genero;
     private Integer nota;
     private String censura;
-    private Boolean audio;
-    private String capa;
+    private Integer audio;
+    private byte[] capa;
 
 
-    public Flmes_Activity(long id,String titulo, Boolean disponibilidade, String genero, Integer nota,
-                          String censura, Boolean audio, String capa) {
+    public Filmes_Activity(long id,String titulo, Integer disponibilidade, String genero, Integer nota,
+                          String censura, Integer audio,byte[] capa) {
         this.titulo = titulo;
         this.disponibilidade = disponibilidade;
         this.genero = genero;
@@ -30,7 +30,13 @@ public class Flmes_Activity implements Serializable {
         this.id = id;
     }
 
-    public Flmes_Activity(){}
+    public Filmes_Activity(){}
+
+    public Filmes_Activity(String titulo, Integer disponibilidade, String genero, Integer nota,
+                           String censura, Integer audio,byte[] capa){
+
+        this(0,titulo,disponibilidade,genero,nota,censura,audio,capa);
+    }
 
     public String getTitulo() {
         return titulo;
@@ -66,21 +72,22 @@ public class Flmes_Activity implements Serializable {
         this.censura = censura;
     }
 
-    public Boolean getAudio() {
+    public Integer getAudio() {
         return audio;
     }
 
-    public void setAudio(Boolean  audio) {
+    public void setAudio(Integer  audio) {
         this.audio = audio;
     }
 
-    public String getCapa() {
+    public byte[] getCapa() {
         return capa;
     }
 
-    public void setCapa(String capa) {
+    public void setCapa(byte[] capa) {
         this.capa = capa;
     }
+
 
     public long getId() {
         return id;
@@ -90,11 +97,11 @@ public class Flmes_Activity implements Serializable {
         this.id = id;
     }
 
-    public Boolean getDisponibilidade() {
+    public Integer getDisponibilidade() {
         return disponibilidade;
     }
 
-    public void setDisponibilidade(Boolean disponibilidade) {
+    public void setDisponibilidade(Integer disponibilidade) {
         this.disponibilidade = disponibilidade;
     }
 

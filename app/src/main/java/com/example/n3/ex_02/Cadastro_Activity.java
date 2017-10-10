@@ -1,5 +1,6 @@
 package com.example.n3.ex_02;
 
+import android.graphics.Bitmap;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -17,15 +19,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import com.example.n3.ex_02.FilmesDao;
 
+import java.io.ByteArrayOutputStream;
 
+import static android.R.attr.bitmap;
 import static com.example.n3.ex_02.R.id.spinner;
 
 public class Cadastro_Activity extends AppCompatActivity {
 
     private Spinner spn_genero;
     private EditText edt_titulo;
-    private Flmes_Activity filme;
+    private Filmes_Activity filme;
     private SeekBar seek_avaliacao;
     private TextView txt_avaliacao;
     private Switch swt_disponivel;
@@ -34,7 +39,13 @@ public class Cadastro_Activity extends AppCompatActivity {
     private String string;
     private Button btn_teste;
     private ToggleButton toggle_btn_audio;
+    private ImageView image_capa;
+    private static final int TRUE = 1;
+    private static final int FALSE = 0;
+    private static final int NOTA = 0;
 
+
+    FilmesDao filmeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +58,10 @@ public class Cadastro_Activity extends AppCompatActivity {
         disponibilidade();
         radio_opcoes();
         toggle_audio();
-        btn_teste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-
+        cadastrar();
     }
+
+
 
     //spinner opções de filmes
     private void spinner_genero(){
@@ -72,7 +78,7 @@ public class Cadastro_Activity extends AppCompatActivity {
                 if(parent.getItemAtPosition(position).toString().equals(null)||
                         parent.getItemAtPosition(position).toString().equals("") ){
 
-                    Toast.makeText(Cadastro_Activity.this,"putz",Toast.LENGTH_SHORT).show();
+
                 }else{
 
                 filme.setGenero(parent.getItemAtPosition(position).toString());}
@@ -95,6 +101,7 @@ public class Cadastro_Activity extends AppCompatActivity {
         seek_avaliacao.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             int progresso = 0;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                progresso = progress;
@@ -108,8 +115,12 @@ public class Cadastro_Activity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 txt_avaliacao.setText("Nota : " + progresso + "/" + seekBar.getMax());
+
                 filme.setNota(progresso);
             }
+
+
+
         });
 
     }
@@ -122,9 +133,15 @@ public class Cadastro_Activity extends AppCompatActivity {
         txt_avaliacao = (TextView) findViewById(R.id.txt_avaliação);
         swt_disponivel = (Switch) findViewById(R.id.swt_disponivel);
         radio_censura = (RadioGroup) findViewById(R.id.radio_censura);
-        filme = new Flmes_Activity();
+        filme = new Filmes_Activity();
         btn_teste = (Button) findViewById(R.id.btn_teste);
         toggle_btn_audio = (ToggleButton) findViewById(R.id.toggle_btn_audio);
+        string = "";
+        filme.setNota(NOTA);
+        filme.setDisponibilidade(FALSE);
+        filme.setAudio(FALSE);
+        filmeDao = new FilmesDao(getBaseContext());
+        image_capa = (ImageView) findViewById(R.id.image_capa);
 
     }
 
@@ -136,10 +153,10 @@ public class Cadastro_Activity extends AppCompatActivity {
             public void onClick(View v) {
                 switchState = swt_disponivel.isChecked();
                 if(switchState == true){
-                    Toast.makeText(Cadastro_Activity.this,"verdade",Toast.LENGTH_SHORT).show();
-                    filme.setDisponibilidade(true);
-                }else{Toast.makeText(Cadastro_Activity.this,"falso",Toast.LENGTH_SHORT).show();
-                    filme.setDisponibilidade(false);}
+                    //Toast.makeText(Cadastro_Activity.this,"verdade",Toast.LENGTH_SHORT).show();
+                    filme.setDisponibilidade(TRUE);
+                }else{//Toast.makeText(Cadastro_Activity.this,"falso",Toast.LENGTH_SHORT).show();
+                    filme.setDisponibilidade(FALSE);}
             }
         });
 
@@ -156,15 +173,15 @@ public class Cadastro_Activity extends AppCompatActivity {
                 switch (checkedId){
                     case R.id.radio_btn_livre:
                         string = getResources().getText(R.string.livre).toString();
-                        filme.setCensura(string);
+
                         break;
                     case R.id.radio_btn_14:
                         string = getResources().getText(R.string._14anos).toString();
-                        filme.setCensura(string);
+
                         break;
                     case R.id.radio_btn_18:
                         string = getResources().getText(R.string._18anos).toString();
-                        filme.setCensura(string);
+
                         break;
                 }
             }
@@ -179,12 +196,64 @@ public class Cadastro_Activity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    filme.setAudio(true);
+                    filme.setAudio(TRUE);
                 } else {
-                    filme.setAudio(false);
+                    filme.setAudio(FALSE);
                 }
             }
         });
     }
 
+
+    public void cadastrar(){
+
+        btn_teste.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                String valida_titulo = edt_titulo.getText().toString();
+
+                if(valida_titulo.equals("")||valida_titulo.equals(null)){
+
+                    Toast.makeText(Cadastro_Activity.this,"Campo título não preenchido",Toast.LENGTH_SHORT).show();
+                }else{
+
+                    if(string.equals("")||string.equals(null)){
+
+                        Toast.makeText(Cadastro_Activity.this,"Campo genero não selecionado",Toast.LENGTH_SHORT).show();
+                    }else{filme.setTitulo(valida_titulo);
+                        filme.setCensura(string);
+                        filmeDao.salvar(filme);
+
+
+
+                        //filme.setCapa();
+
+                        /*ByteArrayOutputStream imgage_byte = new ByteArrayOutputStream();
+
+                        bitmap.compress(Bitmap.CompressFormat.PNG,100,imgage_byte);
+                        filme.setCapa(imgage_byte.toByteArray());
+
+                        filmeDao.salvar(filme);*/
+
+
+                    }
+                }
+
+
+                //edt_titulo.setText(filme.getNota().toString());
+                //edt_titulo.setText(filme.getGenero());
+                //edt_titulo.setText(filme.getDisponibilidade().toString());
+               // edt_titulo.setText(filme.getAudio().toString());
+
+
+
+
+
+
+
+            }
+        });
+    }
 }

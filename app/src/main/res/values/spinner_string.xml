@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="genero_filmes">
-        <item></item>
+
         <item>Comédia</item>
         <item>Ação</item>
         <item>Aventura</item>
