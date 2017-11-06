@@ -4,4 +4,6 @@
     <string name="livre">Livre</string>
     <string name="_14anos">14 anos</string>
     <string name="_18anos">18 anos</string>
+    <string name="alterar">Alterar</string>
+    <string name="excluir">Excluir</string>
 </resources>
