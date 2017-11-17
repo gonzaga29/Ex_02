@@ -7,7 +7,7 @@
         android:title="@string/alterar"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/excluir"
+        android:id="@+id/exclu"
         android:title="@string/excluir"
         app:showAsAction="ifRoom" />
 </menu>
