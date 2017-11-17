@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
+import android.support.v4.app.FragmentActivity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +69,7 @@ public class Main_Filmes extends AppCompatActivity {
 
 
         if (resultCode == RESULT_OK){
+
 
 
             pesquisar();
@@ -148,7 +149,7 @@ public class Main_Filmes extends AppCompatActivity {
 
         if (edt_pesquisa.getText() != null && !edt_pesquisa.getText().toString().equals("")) {
             filme = edt_pesquisa.getText().toString();
-           edt_pesquisa.setText("");
+            edt_pesquisa.setText("");
         }
 
         ArrayList<Filmes_Activity> resultado = (ArrayList<Filmes_Activity>) filme_dao.lista_filmes(filme);

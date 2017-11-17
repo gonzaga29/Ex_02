@@ -12,65 +12,19 @@
     android:padding="10dp"
     >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lista de filmes:"
-        android:layout_marginLeft="3dp"
-
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <EditText
-            android:id="@+id/edt_pesquisa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Nome para pesquisa"
-            android:inputType="text"
-            android:maxEms="8"
-
-            />
-
-        <Button
-            android:id="@+id/btn_pesquisa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pesquisa"
-            android:layout_marginLeft="10dp"
-            />
-
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/list_filmes"
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-    </ListView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_tela_cadastro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:fabSize="mini"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="end"
-        app:srcCompat="@android:drawable/ic_input_add" />
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.n3.ex_02.FilmesFragments"
-        android:id="@+id/fragmentList">
-
+        android:name ="com.example.n3.ex_02.FilmesFragments"
+        android:id="@+id/filmes_fragment">
     </fragment>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
 
 
 </LinearLayout>
